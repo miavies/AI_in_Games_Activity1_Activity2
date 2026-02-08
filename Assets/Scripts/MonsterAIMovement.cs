@@ -57,16 +57,19 @@ public class MonsterAIMovement : MonoBehaviour
         switch (state) 
         {
             case "Patrol":
+                Debug.Log("Patrolling");
                 agent.speed = 2;
                 agent.isStopped = false;
                 Patrol();
                 break;
 
             case "Search":
+                Debug.Log("Searching");
                 Search();
                 break;
 
             case "Chase":
+                Debug.Log("Chasing");
                 Chase();
                 break;
         }      
@@ -80,6 +83,7 @@ public class MonsterAIMovement : MonoBehaviour
 
         if (IsTargetVisible())
         {
+            Debug.Log("Target Visible");
             LookAtTarget();
             return "Chase";
         }
@@ -112,6 +116,7 @@ public class MonsterAIMovement : MonoBehaviour
         {
             agent.isStopped = true;
             anim.SetBool("Attacking", true);
+            Debug.Log("Attacking");
             wasChasing = false;
         }
         else

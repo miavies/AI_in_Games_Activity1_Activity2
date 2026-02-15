@@ -20,25 +20,37 @@ namespace Unity.AI.Navigation.Samples
     {
         public OffMeshLinkMoveMethod m_Method = OffMeshLinkMoveMethod.Parabola;
         public AnimationCurve m_Curve = new AnimationCurve();
-
+        
         IEnumerator Start()
         {
             NavMeshAgent agent = GetComponent<NavMeshAgent>();
             agent.autoTraverseOffMeshLink = false;
+
+            Animator anim = GetComponent<Animator>();
+
+            bool isJumping = false;
             while (true)
             {
                 if (agent.isOnOffMeshLink)
                 {
-                    if (m_Method == OffMeshLinkMoveMethod.NormalSpeed)
+                    if (!isJumping)
+                    {
+                        anim.SetTrigger("Jump");
+                        isJumping = true;
+                    }
+                        if (m_Method == OffMeshLinkMoveMethod.NormalSpeed)
                         yield return StartCoroutine(NormalSpeed(agent));
                     else if (m_Method == OffMeshLinkMoveMethod.Parabola)
                         yield return StartCoroutine(Parabola(agent, 2.0f, 0.5f));
                     else if (m_Method == OffMeshLinkMoveMethod.Curve)
                         yield return StartCoroutine(Curve(agent, 0.5f));
+
+                    yield return new WaitForSeconds(0.2f);
                     agent.CompleteOffMeshLink();
+                    isJumping = false;
                 }
 
-                yield return null;
+                 yield return null;
             }
         }
 
